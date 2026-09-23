@@ -1,0 +1,29 @@
+{
+    "name": "Microbit-Display-Device/MDD",
+    "description": "",
+    "dependencies": {
+        "core": "*",
+        "microphone": "*",
+        "bluetooth": "*",
+        "display-shield": "github:microbit-apps/display-shield#v1.1.4",
+        "microbit-pxt-flashstorage": "github:bsiever/microbit-pxt-flashstorage#v0.1.4",
+        "power": "github:microbit-foundation/pxt-microbit-v2-power#v0.2.7"
+    },
+    "files": [
+        "main.blocks",
+        "main.ts",
+        "README.md",
+        "microfi.ts"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "targetVersions": {
+        "target": "9.0.12",
+        "targetId": "microbit"
+    },
+    "supportedTargets": [
+        "microbit"
+    ],
+    "preferredEditor": "blocksprj"
+}
