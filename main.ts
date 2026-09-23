@@ -118,7 +118,7 @@ input.onButtonPressed(Button.A, function () {
         StartDesktop()
     }
 })
-function SaveData () {
+function SaveData (hash: number, perms_level: number) {
     MDDSYSslots1[0] = MDDSYSsetupcomplete
     for (let value of MDDSYSslots1) {
         MDDSYSslotscsv = "" + MDDSYSslotscsv + value + ","
@@ -163,21 +163,37 @@ function Render (flags: string, args: string) {
         screen().drawTransparentBitmap(MDDSYSboot_icon, 45, 10)
         screen().drawRect(36, 70, 80, 10, 15)
         MDDSYSload_ = 0
-        if (args != "--skip-load") {
+        if (args == "--skip-load") {
+            Render("--auth", "")
+        } else if (args == "--desktop-test") {
+            Render("--auth", "--skip")
+        } else if (args == "--demo") {
             for (let index = 0; index < 80; index++) {
-                basic.pause(200)
+                basic.pause(100)
                 screen().fillRect(36, 70, MDDSYSload_, 10, 15)
                 MDDSYSload_ += 1
             }
+            basic.pause(100)
+            Render("--auth", "--skip")
+        } else {
+            for (let index = 0; index < 80; index++) {
+                basic.pause(100)
+                screen().fillRect(36, 70, MDDSYSload_, 10, 15)
+                MDDSYSload_ += 1
+            }
+            basic.pause(100)
+            Render("--auth", "")
         }
-        basic.pause(100)
-        Render("--auth", "")
     } else if (flags == "--error") {
         SysErr(args, "--render")
     } else if (flags == "--auth") {
-        screen().fill(1)
-        screen().printCenter("Starting BLE", 10, 15)
-        StartBLE()
+        if (args == "--skip") {
+            StartDesktop()
+        } else {
+            screen().fill(1)
+            screen().printCenter("Starting BLE", 10, 15)
+            StartBLE()
+        }
     } else {
         DrawDesktop()
         DrawApps()
@@ -296,7 +312,15 @@ function DefaultVars () {
     MDDSYSlogAPIcurrent_line = 0
 }
 function Filesystem (flags: string, args: string, args2: string, hash: number, perms_level: number) {
-	
+    if (flags == "--saveflash") {
+        if (permsAPI("--check", perms_level, hash) == "true") {
+            SaveData(hash, 0)
+        }
+    } else if (flags == "--loadflash") {
+        LoadData()
+    } else {
+    	
+    }
 }
 function PowerMenu (flags: string) {
     if (flags == "--render") {
@@ -430,6 +454,10 @@ function permsAPI (flags: string, perms_level: number, hash: number) {
                 return "false"
             }
         }
+    } else if (flags == "--regenhash") {
+        if (hash == MDDSYStempfull_hash) {
+            return convertToText(parseFloat("" + Auth("--kernel", "gethash") * 798 + parseFloat(MDDOSos_hash) * Auth("--kernel", "gethash")) * 555375)
+        }
     }
     return "null"
 }
@@ -454,9 +482,10 @@ function DrawApps () {
 }
 function Kernel (flags: string, args: string, args2: string, args3: string, perms_level: number, hash: string) {
     MDDSYStempfull_hash = parseFloat("" + Auth("--kernel", "gethash") * 798 + parseFloat(MDDOSos_hash) * Auth("--kernel", "gethash")) * 555375
+    MDDSYStempfull_hash = parseFloat(permsAPI("--regenhash", 0, MDDSYStempfull_hash))
     if (flags == "--filesystem") {
         if (permsAPI("--check", perms_level, parseFloat(hash)) == "true") {
-            Filesystem(args, args2, args3, parseFloat(""), perms_level)
+            Filesystem(args, args2, args3, MDDSYStempfull_hash, perms_level)
         }
     }
 }
@@ -783,8 +812,8 @@ let MDDOSiconssleep: Bitmap = null
 let MDDOSiconsrestart: Bitmap = null
 let MDDOSPnPcurrent_device_name = ""
 let MDDSYSserialline = ""
-let MDDOSos_hash = ""
 let MDDOSiconsredx: Bitmap = null
+let MDDOSos_hash = ""
 let MDDSYStempfull_hash = 0
 let MDDOSiconsble: Bitmap = null
 let MDDOSiconstart: Bitmap = null
@@ -830,7 +859,7 @@ let MDDOSappopen = false
 let MDDOSStartmenuopen = false
 let MDDOSappslot1y = 0
 let MDDOSappslot1x = 0
-Boot("--skip-load")
+Boot("--demo")
 loops.everyInterval(1000, function () {
     MDDOSos_hash = "" + convertToText(randint(0, 100)) + convertToText(randint(0, 100)) + convertToText(randint(0, 100)) + convertToText(randint(0, 100)) + convertToText(randint(0, 100))
 })
