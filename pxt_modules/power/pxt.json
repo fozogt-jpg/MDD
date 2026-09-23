@@ -1,0 +1,28 @@
+{
+    "name": "power",
+    "version": "0.2.7",
+    "description": "Power saving. micro:bit (V2) only.",
+    "dependencies": {
+        "core": "*"
+    },
+    "files": [
+        "power.cpp",
+        "power.ts",
+        "shims.d.ts",
+        "enums.d.ts",
+        "README.md",
+        "basic-sleep-wake.md"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "public": true,
+    "targetVersions": {
+        "target": "4.0.11",
+        "targetId": "microbit"
+    },
+    "supportedTargets": [
+        "microbit"
+    ],
+    "preferredEditor": "blocksprj"
+}

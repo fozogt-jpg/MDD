@@ -1,0 +1,37 @@
+{
+    "name": "microbit-pxt-flashstorage",
+    "version": "0.1.4",
+    "description": "Flashstorage access (get/put)",
+    "license": "MIT",
+    "dependencies": {
+        "core": "*"
+    },
+    "files": [
+        "README.md",
+        "flashstorage.ts",
+        "flashstorage.cpp",
+        "shims.d.ts",
+        "enums.d.ts",
+        "tutorial-info-cache.json"
+    ],
+    "testFiles": [
+        "test.ts"
+    ],
+    "public": true,
+    "targetVersions": {
+        "target": "5.0.12",
+        "targetId": "microbit"
+    },
+    "supportedTargets": [
+        "microbit"
+    ],
+    "preferredEditor": "tsprj",
+    "authors": [
+        "Bill Siever <bsiever@gmail.com>"
+    ],
+    "card": {
+        "name": "Flashstorage",
+        "imageUrl": "file:../icon.png",
+        "feedbackUrl": "http://siever.info"
+    }
+}

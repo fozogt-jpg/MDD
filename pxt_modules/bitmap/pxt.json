@@ -1,0 +1,23 @@
+{
+    "name": "bitmap",
+    "description": "Support for bitmaps (micro:bit V2 only).",
+    "dependencies": {
+        "core": "*"
+    },
+    "files": [
+        "bitmap.cpp",
+        "bitmap.ts",
+        "shims.d.ts"
+    ],
+    "public": true,
+    "targetVersions": {
+        "target": "9.0.12",
+        "pxt": "13.0.9"
+    },
+    "preferredEditor": "tsprj",
+    "hidden": true,
+    "searchOnly": true,
+    "disablesVariants": [
+        "mbdal"
+    ]
+}

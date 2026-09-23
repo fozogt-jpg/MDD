@@ -1,24 +1,28 @@
+# MDD
+MDD (Micro:bit display device) is a full operating system for micro:bit v2's with display shields
 
-> Open this page at [https://fozogt-jpg.github.io/MDD/](https://fozogt-jpg.github.io/MDD/)
+## Current features
+* Desktop
+* Apps
+* Permissions (Not fully finished)
 
-## Use as Extension
+## Upcoming features
+* PnP (Plug and Play) with other micro:bits running MDD compatible software
+* Dynamic apps
+* Full ble wifi via (Micro-FI)[https://github.com/jxoj/Micro-FI] which is still in development
+* A appstore
+* A app that allows you to use your micro:bit as a keyboard or mouse for a computer with (micro:bit blehid)[https://makecode.microbit.org/pkg/bsiever/microbit-pxt-blehid]
+* OTA updates via Micro-FI
 
-This repository can be added as an **extension** in MakeCode.
+## Suggestions
+Please put any suggestion in github issues and we will take a look.
 
-* open [https://makecode.microbit.org/](https://makecode.microbit.org/)
-* click on **New Project**
-* click on **Extensions** under the gearwheel menu
-* search for **https://github.com/fozogt-jpg/MDD** and import
+## FAQ
+Will MDD support microbit v1 devices?\
+Probaly not there may a MDD-lite release that allows you to have some features of MDD on just the LED screen.
 
-## Edit this project
+Where can I download the `.hex` file?\
+(Here)[https://jxoj.github.io/MDD/versions/latest.hex] (Not really the website hasn't been built)
 
-To edit this repository in MakeCode.
-
-* open [https://makecode.microbit.org/](https://makecode.microbit.org/)
-* click on **Import** then click on **Import URL**
-* paste **https://github.com/fozogt-jpg/MDD** and click import
-
-#### Metadata (used for search, rendering)
-
-* for PXT/microbit
-<script src="https://makecode.com/gh-pages-embed.js"></script><script>makeCodeRender("{{ site.makecode.home_url }}", "{{ site.github.owner_name }}/{{ site.github.repository_name }}");</script>
+How can I install MDD?\
+At (MDD Installer)[https://jxoj.github.io/MDD/install] (Once again not really the website hasn't been built)

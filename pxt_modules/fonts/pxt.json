@@ -1,0 +1,20 @@
+{
+    "name": "fonts",
+    "description": "Fonts for displays (V2 only).",
+    "dependencies": {
+        "core": "*"
+    },
+    "files": [
+        "font12.jres"
+    ],
+    "public": true,
+    "targetVersions": {
+        "target": "9.0.12",
+        "pxt": "13.0.9"
+    },
+    "hidden": true,
+    "disablesVariants": [
+        "mbdal"
+    ],
+    "searchOnly": true
+}
