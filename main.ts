@@ -47,6 +47,9 @@ function ButtonClicks () {
         }
     }
 }
+function DrawAppSettings () {
+	
+}
 // MDDSYSsetupcomplete is 1,0
 // 
 // KEY:
@@ -467,7 +470,7 @@ function DrawDesktop () {
 }
 function DrawApps () {
     if (MDDOSappssettingsopen) {
-        screen().fill(1)
+    	
     }
     if (MDDOSappopen) {
         screen().fillRect(0, 0, 160, 13, 8)
