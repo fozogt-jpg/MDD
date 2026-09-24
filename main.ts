@@ -438,20 +438,20 @@ function logAPI (text: string, flags: string) {
 function permsAPI (flags: string, perms_level: number, hash: number) {
     if (flags == "--check") {
         if (perms_level == 0) {
-            return "true"
+            return "basic_read"
         } else if (perms_level == 1) {
-            return "true"
+            return "basic_read&write"
         } else if (perms_level == 2) {
             if (hash == MDDSYStempfull_hash) {
-                return "true"
+                return "os_read"
             } else {
-                return "false"
+                return "err_incorrect_hash"
             }
         } else if (perms_level == 3) {
             if (hash == MDDSYStempfull_hash) {
-                return "true"
+                return "os_read&write"
             } else {
-                return "false"
+                return "err_incorrect_hash"
             }
         }
     } else if (flags == "--regenhash") {
