@@ -1,26 +1,3 @@
-// Micro-FI is wifi for micro:bit
-// 
-// Using BLE (instead of a wifi chip)
-// 
-// Router site and source code
-// 
-// https://jxoj.github.io/Micro-FI
-// 
-// https://github.com/jxoj/Micro-FI
-// 
-// IP addresses look like this 678.123.5.135
-// 
-// Mac addesses look like this
-// 
-// sim-1599129455
-// 
-// Use GetRawTxt to get txt from a web address such as https://example.com/example.txt
-// 
-// Use PostRawTxt to send data to other micro:bits
-// 
-// Use Radio to simulate micro:bit Radio
-// 
-// for examples see the Test function
 function ButtonClicks () {
     if (inDesktop()) {
         if (OnButton(MDDOSappslot1x, MDDOSappslot1y, 16, 16)) {
@@ -40,23 +17,33 @@ function ButtonClicks () {
         }
     }
     if (MDDSYSPowerMenuopen) {
-        if (OnButton(0, 2, 16, 16)) {
+        if (OnButton(47, 35, 65, 19)) {
             power.fullPowerOn(FullPowerSource.P2)
             power.lowPowerEnable(LowPowerEnable.Allow)
-            power.lowPowerRequest(LowPowerMode.Continue)
+            power.lowPowerRequest(LowPowerMode.Wait)
+        } else if (OnButton(47, 57, 65, 19)) {
+            power.fullPowerOn(FullPowerSource.P2)
+            power.lowPowerEnable(LowPowerEnable.Allow)
+            power.lowPowerPause(500)
+        } else if (OnButton(47, 79, 65, 19)) {
+            power.fullPowerOn(FullPowerSource.A)
+            power.lowPowerEnable(LowPowerEnable.Allow)
+            power.lowPowerRequest(LowPowerMode.Wait)
+        }
+    }
+    if (MDDOSStartmenuopen) {
+        if (OnButton(140, 80, 16, 16)) {
+            if (!(MDDSYSPowerMenuopen)) {
+                PowerMenu("--open")
+            } else if (MDDSYSPowerMenuopen) {
+                PowerMenu("--close")
+            }
         }
     }
 }
 function DrawAppSettings () {
-	
+    screen().fill(1)
 }
-// MDDSYSsetupcomplete is 1,0
-// 
-// KEY:
-// 
-// First # is slot #
-// 
-// Second # is place #
 function CloseApp (app: string) {
     if (app == "Settings") {
         MDDOSappssettingsopen = false
@@ -126,27 +113,27 @@ function SaveData (hash: number, perms_level: number) {
     for (let value of MDDSYSslots1) {
         MDDSYSslotscsv = "" + MDDSYSslotscsv + value + ","
     }
-    flashstorage.put("Slot1", MDDSYSslotscsv)
+    flashstorage.put("Partion 1", MDDSYSslotscsv)
     MDDSYSslotscsv = ""
     for (let value2 of MDDSYSslots2) {
         MDDSYSslotscsv = "" + MDDSYSslotscsv + value2 + ","
     }
-    flashstorage.put("Slot2", MDDSYSslotscsv)
+    flashstorage.put("Partion 2", MDDSYSslotscsv)
     MDDSYSslotscsv = ""
     for (let value3 of MDDSYSslots3) {
         MDDSYSslotscsv = "" + MDDSYSslotscsv + value3 + ","
     }
-    flashstorage.put("Slot3", MDDSYSslotscsv)
+    flashstorage.put("Partion 3", MDDSYSslotscsv)
     MDDSYSslotscsv = ""
     for (let value4 of MDDSYSslots4) {
         MDDSYSslotscsv = "" + MDDSYSslotscsv + value4 + ","
     }
-    flashstorage.put("Slot4", MDDSYSslotscsv)
+    flashstorage.put("Partion 4", MDDSYSslotscsv)
     MDDSYSslotscsv = ""
     for (let value5 of MDDSYSslots5) {
         MDDSYSslotscsv = "" + MDDSYSslotscsv + value5 + ","
     }
-    flashstorage.put("Slot5", MDDSYSslotscsv)
+    flashstorage.put("Partion 5", MDDSYSslotscsv)
     MDDSYSslotscsv = ""
 }
 function StartBLE () {
@@ -203,6 +190,9 @@ function Render (flags: string, args: string) {
         if (MDDOSStartmenuopen) {
             Startmenu("--render")
         }
+        if (MDDSYSPowerMenuopen) {
+            PowerMenu("--render")
+        }
         DrawTaskbar()
         DrawMouse()
     }
@@ -228,7 +218,10 @@ function Startmenu (flags: string) {
     if (flags == "--render") {
         screen().fill(15)
         screen().printCenter("Start Menu:", 2, 1)
-        PowerMenu("--render")
+        if (OnButton(140, 80, 16, 16)) {
+            screen().drawRect(139, 79, 18, 18, 1)
+        }
+        screen().drawTransparentBitmap(MDDOSiconspower, 140, 80)
     } else if (flags == "--open") {
         MDDOSStartmenuopen = true
     } else if (flags == "--close") {
@@ -236,6 +229,7 @@ function Startmenu (flags: string) {
     }
 }
 function DefaultVars () {
+    MDDSYSPowerMenuopen = false
     MDDOSappopen = false
     MDDOSappssettingsopen = false
     MDDOSappsslot1 = "Settings"
@@ -330,8 +324,29 @@ function PowerMenu (flags: string) {
         screen().fillRect(45, 25, 70, 100, 12)
         screen().print("Power Menu", 50, 26, 1)
         screen().drawRect(47, 35, 65, 19, 15)
+        if (MDDSYSPowerMenuopen) {
+            if (OnButton(47, 35, 65, 19)) {
+                screen().fillRect(47, 35, 65, 19, 15)
+            }
+        }
         screen().drawTransparentBitmap(MDDOSiconspower, 48, 36)
         screen().print("Off", 75, 40, 1)
+        screen().drawRect(47, 57, 65, 19, 15)
+        if (MDDSYSPowerMenuopen) {
+            if (OnButton(47, 57, 65, 19)) {
+                screen().fillRect(47, 57, 65, 19, 15)
+            }
+        }
+        screen().drawTransparentBitmap(MDDOSiconsrestart, 48, 58)
+        screen().print("Restart", 67, 62, 1)
+        screen().drawRect(47, 79, 65, 19, 15)
+        if (MDDSYSPowerMenuopen) {
+            if (OnButton(47, 79, 65, 19)) {
+                screen().fillRect(47, 79, 65, 19, 15)
+            }
+        }
+        screen().drawTransparentBitmap(MDDOSiconssleep, 48, 80)
+        screen().print("Sleep", 70, 83, 1)
     } else if (flags == "--open") {
         MDDSYSPowerMenuopen = true
     } else if (flags == "--close") {
@@ -389,6 +404,12 @@ function POST (flags: string) {
         }
     }
 }
+function LaunchAppLogic (app: string) {
+    if (app == "Settings") {
+        MDDOSappssettingsopen = true
+        MDDOScurrentopenapp = "Settings"
+    }
+}
 function inDesktop () {
     if (!(MDDOSStartmenuopen)) {
         if (MDDSYSRenderallow) {
@@ -402,6 +423,11 @@ function inDesktop () {
         }
     } else {
         return false
+    }
+}
+function DrawAppsLogic () {
+    if (MDDOSappssettingsopen) {
+        DrawAppSettings()
     }
 }
 function DrawTaskbar () {
@@ -469,9 +495,7 @@ function DrawDesktop () {
     DrawDesktopApps()
 }
 function DrawApps () {
-    if (MDDOSappssettingsopen) {
-    	
-    }
+    DrawAppsLogic()
     if (MDDOSappopen) {
         screen().fillRect(0, 0, 160, 13, 8)
         if (OnButton(148, 2, 9, 9)) {
@@ -805,14 +829,21 @@ function DrawDesktopApps () {
     screen().print(MDDOSappsslot1, MDDOSappslot1x - 10, MDDOSappslot1y + 17, 1)
 }
 function LaunchApp (app: string) {
-    if (app == "Settings") {
-        MDDOSappssettingsopen = true
-        MDDOScurrentopenapp = "Settings"
-    }
+    LaunchAppLogic(app)
     MDDOSappopen = true
 }
-let MDDOSiconssleep: Bitmap = null
-let MDDOSiconsrestart: Bitmap = null
+// MDD is a full Operating Sytem for micro:bit V2, using display shields.
+// 
+// Current MDD release: Dev 1.0.0
+// 
+// Git Repo: https://github.com/fozogt-jpg/MDD
+// 
+// Boot Flags are:
+// --demo: Launch in a mode that does not use user spefic things and is generally better for looking at and testing the end user expirence
+// 
+// --desktop-test: Boot straight to the desktop
+// 
+// --skip-load: Skip the MDD loading screen.
 let MDDOSPnPcurrent_device_name = ""
 let MDDSYSserialline = ""
 let MDDOSiconsredx: Bitmap = null
@@ -821,12 +852,14 @@ let MDDSYStempfull_hash = 0
 let MDDOSiconsble: Bitmap = null
 let MDDOSiconstart: Bitmap = null
 let MDDOSiconscursor: Bitmap = null
-let MDDOSiconspower: Bitmap = null
+let MDDOSiconssleep: Bitmap = null
+let MDDOSiconsrestart: Bitmap = null
 let MDDSYSlogAPIcurrent_line = 0
 let MDDSYSsys_ver = ""
 let MDDOSiconssettings: Bitmap = null
 let MDDOSappsslot1bp: Bitmap = null
 let MDDOSappsslot1 = ""
+let MDDOSiconspower: Bitmap = null
 let MDDSYStempkernel_hash = ""
 let MDDSYSload_ = 0
 let MDDSYSboot_icon: Bitmap = null
@@ -862,7 +895,7 @@ let MDDOSappopen = false
 let MDDOSStartmenuopen = false
 let MDDOSappslot1y = 0
 let MDDOSappslot1x = 0
-Boot("--demo")
+Boot("--desktop-test")
 loops.everyInterval(1000, function () {
     MDDOSos_hash = "" + convertToText(randint(0, 100)) + convertToText(randint(0, 100)) + convertToText(randint(0, 100)) + convertToText(randint(0, 100)) + convertToText(randint(0, 100))
 })
