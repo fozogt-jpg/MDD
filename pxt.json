@@ -1,5 +1,6 @@
 {
     "name": "Microbit-Display-Device/MDD",
+    "version": "0.1.0",
     "description": "",
     "dependencies": {
         "core": "*",
