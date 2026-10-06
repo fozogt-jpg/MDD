@@ -42,7 +42,14 @@ function ButtonClicks () {
     }
 }
 function DrawAppSettings () {
+    MDDOSappssettingscurrentpage = "about"
     screen().fill(1)
+    screen().drawLine(50, 0, 50, 200, 11)
+    DrawAppSettingsHovers()
+    DrawAppSettingsMenus()
+    screen().drawTransparentBitmap(MDDOSiconsappssettingsabout, 0, 17)
+    screen().print("About", 10, 17, 15)
+    screen().drawLine(0, 30, 50, 30, 11)
 }
 function CloseApp (app: string) {
     if (app == "Settings") {
@@ -53,6 +60,10 @@ function CloseApp (app: string) {
 controller.onShieldEvent(ControllerShieldEvent.Absent, function () {
     MDDSYSPostDisplay_Shield = false
 })
+function DrawKioskBars () {
+    screen().fillRect(0, 0, 160, 13, 8)
+    screen().fillRect(0, 100, 160, 20, 15)
+}
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     ButtonClicks()
 })
@@ -81,6 +92,7 @@ function SysErr (error: string, flags: string) {
 }
 function Assets () {
     Images()
+    Text()
 }
 function OnButton (x: number, y: number, w: number, h: number) {
     MDDOSOnButtonc1x = x
@@ -184,6 +196,23 @@ function Render (flags: string, args: string) {
             screen().printCenter("Starting BLE", 10, 15)
             StartBLE()
         }
+    } else if (flags == "--kiosk-app") {
+        DrawAppsLogic()
+        if (MDDSYSkioskbars) {
+            DrawKioskBars()
+        }
+        DrawMouse()
+    } else if (flags == "--start-kiosk") {
+        MDDSYSKiosk_App = true
+        if (MDDSYSSelectedKiosk_App.includes("[Bars]")) {
+            MDDSYSRenderstart_kioskarray = MDDSYSSelectedKiosk_App.split("[")
+            MDDSYSRenderstart_kioskarray.pop()
+            MDDSYSSelectedKiosk_App = MDDSYSRenderstart_kioskarray[0]
+            MDDSYSkioskbars = true
+            LaunchApp(MDDSYSSelectedKiosk_App)
+        } else {
+            LaunchApp(MDDSYSSelectedKiosk_App)
+        }
     } else {
         DrawDesktop()
         DrawApps()
@@ -216,12 +245,7 @@ function LoadData () {
 }
 function Startmenu (flags: string) {
     if (flags == "--render") {
-        screen().fill(15)
-        screen().printCenter("Start Menu:", 2, 1)
-        if (OnButton(140, 80, 16, 16)) {
-            screen().drawRect(139, 79, 18, 18, 1)
-        }
-        screen().drawTransparentBitmap(MDDOSiconspower, 140, 80)
+    	
     } else if (flags == "--open") {
         MDDOSStartmenuopen = true
     } else if (flags == "--close") {
@@ -229,6 +253,8 @@ function Startmenu (flags: string) {
     }
 }
 function DefaultVars () {
+    MDDSYSkioskbars = false
+    MDDSYSKiosk_App = false
     MDDSYSPowerMenuopen = false
     MDDOSappopen = false
     MDDOSappssettingsopen = false
@@ -370,7 +396,11 @@ function Boot (flags: string) {
     Assets()
     DefaultVars()
     POST("--init")
-    Render("--bootsequence", flags)
+    if (flags == "--kiosk-app") {
+        Render("--start-kiosk", "")
+    } else {
+        Render("--bootsequence", flags)
+    }
 }
 function POST (flags: string) {
     if (flags == "--init") {
@@ -447,6 +477,12 @@ function DrawTaskbar () {
         }
     }
 }
+function ChannelLog () {
+    MDDOSchannellog_lines = 2
+    MDDOSchannellog = []
+    MDDOSchannellog.push("Added About")
+    MDDOSchannellog.push("to Settings App")
+}
 function logAPI (text: string, flags: string) {
     if (flags.includes("--reset")) {
         MDDSYSlogAPIcurrent_line = 0
@@ -494,6 +530,9 @@ function DrawDesktop () {
     screen().drawBitmap(MDDOSimagesbackground, 0, 0)
     DrawDesktopApps()
 }
+function Text () {
+    ChannelLog()
+}
 function DrawApps () {
     DrawAppsLogic()
     if (MDDOSappopen) {
@@ -527,6 +566,11 @@ serial.onDataReceived(serial.delimiters(Delimiters.Hash), function () {
     MDDSYSserialline = serial.readUntil(serial.delimiters(Delimiters.Hash))
     MDDOSPnP("--check")
 })
+function DrawAppSettingsHovers () {
+    if (OnButton(1, 15, 40, 12)) {
+        screen().drawRect(1, 15, 40, 12, 12)
+    }
+}
 function Test () {
     StartDesktop()
 }
@@ -685,6 +729,31 @@ function Icons () {
         . . . . . 1 1 1 1 1 . . . . . . 
         . . . . . . . . . . . . . . . . 
         `
+    MDDOSiconsappssettingsabout = bmp`
+        . . . f f . . . 
+        . . . f f . . . 
+        . . . . . . . . 
+        . . . f f . . . 
+        . . . f f . . . 
+        . . . f f . . . 
+        . . . f f . . . 
+        . . . f f . . . 
+        `
+}
+function DrawAppSettingsMenus () {
+    if (MDDOSappssettingscurrentpage == "about") {
+        screen().drawRect(1, 15, 40, 12, 15)
+        screen().drawTransparentBitmap(MDDSYSboot_icon, 70, -5)
+        screen().print("MDD OS " + MDDSYSsys_ver, 70, 40, 15)
+        screen().print("Channel Log:", 69, 54, 15)
+        MDDOSappssettingsprint_channellog_lines = 0
+        MDDOSappssettingschannellog_lines_y = 0
+        for (let index = 0; index < MDDOSchannellog_lines; index++) {
+            MDDOSappssettingschannellog_lines_y += 10
+            screen().print(MDDOSchannellog[MDDOSappssettingsprint_channellog_lines], 55, 54 + MDDOSappssettingschannellog_lines_y, 15)
+            MDDOSappssettingsprint_channellog_lines += 1
+        }
+    }
 }
 function Images () {
     Icons()
@@ -844,23 +913,32 @@ function LaunchApp (app: string) {
 // --desktop-test: Boot straight to the desktop
 // 
 // --skip-load: Skip the MDD loading screen.
+// 
+// --kiosk-app: Launch only what is nesscary to boot an app then boots straight into it, the app can be set in the MDDSYSSelectedKiosk_App var. Adding [Bars] to the end will add Bars the same size as the taskbar and appbar.
+let MDDOSappssettingschannellog_lines_y = 0
+let MDDOSappssettingsprint_channellog_lines = 0
 let MDDOSPnPcurrent_device_name = ""
 let MDDSYSserialline = ""
 let MDDOSiconsredx: Bitmap = null
 let MDDOSos_hash = ""
 let MDDSYStempfull_hash = 0
+let MDDOSchannellog: string[] = []
+let MDDOSchannellog_lines = 0
 let MDDOSiconsble: Bitmap = null
 let MDDOSiconstart: Bitmap = null
 let MDDOSiconscursor: Bitmap = null
 let MDDOSiconssleep: Bitmap = null
 let MDDOSiconsrestart: Bitmap = null
+let MDDOSiconspower: Bitmap = null
 let MDDSYSlogAPIcurrent_line = 0
 let MDDSYSsys_ver = ""
 let MDDOSiconssettings: Bitmap = null
 let MDDOSappsslot1bp: Bitmap = null
 let MDDOSappsslot1 = ""
-let MDDOSiconspower: Bitmap = null
 let MDDSYStempkernel_hash = ""
+let MDDSYSRenderstart_kioskarray: string[] = []
+let MDDSYSKiosk_App = false
+let MDDSYSkioskbars = false
 let MDDSYSload_ = 0
 let MDDSYSboot_icon: Bitmap = null
 let MDDSYSfirm_type = ""
@@ -889,12 +967,16 @@ let MDDOSimagesbackground: Bitmap = null
 let MDDSYSRenderallow = false
 let MDDSYSPostDisplay_Shield = false
 let MDDOSappssettingsopen = false
+let MDDOSiconsappssettingsabout: Bitmap = null
+let MDDOSappssettingscurrentpage = ""
 let MDDSYSPowerMenuopen = false
 let MDDOScurrentopenapp = ""
 let MDDOSappopen = false
 let MDDOSStartmenuopen = false
 let MDDOSappslot1y = 0
 let MDDOSappslot1x = 0
+let MDDSYSSelectedKiosk_App = ""
+MDDSYSSelectedKiosk_App = ""
 Boot("--desktop-test")
 loops.everyInterval(1000, function () {
     MDDOSos_hash = "" + convertToText(randint(0, 100)) + convertToText(randint(0, 100)) + convertToText(randint(0, 100)) + convertToText(randint(0, 100)) + convertToText(randint(0, 100))
@@ -902,6 +984,8 @@ loops.everyInterval(1000, function () {
 basic.forever(function () {
     if (MDDSYSOverride_Render_Error) {
         Render("--error", MDDSYSSysErrorError)
+    } else if (MDDSYSKiosk_App) {
+        Render("--kiosk-app", "")
     } else if (MDDSYSRenderallow) {
         Render("", "")
     }
