@@ -245,7 +245,13 @@ function LoadData () {
 }
 function Startmenu (flags: string) {
     if (flags == "--render") {
-    	
+        screen().fill(15)
+        screen().drawLine(0, 99, 159, 99, 1)
+        screen().printCenter("Start Menu:", 2, 1)
+        if (OnButton(140, 80, 16, 16)) {
+            screen().drawRect(139, 79, 18, 18, 1)
+        }
+        screen().drawTransparentBitmap(MDDOSiconspower, 140, 80)
     } else if (flags == "--open") {
         MDDOSStartmenuopen = true
     } else if (flags == "--close") {
@@ -253,9 +259,9 @@ function Startmenu (flags: string) {
     }
 }
 function DefaultVars () {
+    MDDSYSPowerMenuopen = false
     MDDSYSkioskbars = false
     MDDSYSKiosk_App = false
-    MDDSYSPowerMenuopen = false
     MDDOSappopen = false
     MDDOSappssettingsopen = false
     MDDOSappsslot1 = "Settings"
@@ -929,12 +935,12 @@ let MDDOSiconstart: Bitmap = null
 let MDDOSiconscursor: Bitmap = null
 let MDDOSiconssleep: Bitmap = null
 let MDDOSiconsrestart: Bitmap = null
-let MDDOSiconspower: Bitmap = null
 let MDDSYSlogAPIcurrent_line = 0
 let MDDSYSsys_ver = ""
 let MDDOSiconssettings: Bitmap = null
 let MDDOSappsslot1bp: Bitmap = null
 let MDDOSappsslot1 = ""
+let MDDOSiconspower: Bitmap = null
 let MDDSYStempkernel_hash = ""
 let MDDSYSRenderstart_kioskarray: string[] = []
 let MDDSYSKiosk_App = false
@@ -977,7 +983,7 @@ let MDDOSappslot1y = 0
 let MDDOSappslot1x = 0
 let MDDSYSSelectedKiosk_App = ""
 MDDSYSSelectedKiosk_App = ""
-Boot("--desktop-test")
+Boot("--demo")
 loops.everyInterval(1000, function () {
     MDDOSos_hash = "" + convertToText(randint(0, 100)) + convertToText(randint(0, 100)) + convertToText(randint(0, 100)) + convertToText(randint(0, 100)) + convertToText(randint(0, 100))
 })
