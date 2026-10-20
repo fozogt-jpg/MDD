@@ -1,5 +1,7 @@
 # MDD
-MDD (Micro:bit display device) is a full operating system for micro:bit v2's with display shields
+MDD (Micro:bit display device) is a full operating system for micro:bit v2's with display shields.\
+[Main Site](https://jxoj.github.io/MDD/)
+
 
 ## Current features
 * Desktop
