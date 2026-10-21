@@ -20,10 +20,10 @@ MDD (Micro:bit display device) is a full operating system for micro:bit v2's wit
 Please put any suggestion in github issues and we will take a look.
 
 ## FAQ
-Will MDD support microbit v1 devices?\
+#### Will MDD support microbit v1 devices?\
 Probaly not there may a MDD-lite release that allows you to have some features of MDD on just the LED screen.
 
-Why is my release named after a food?\
+#### Why is my release named after a food?\
 Because like android naming android 4.4 kitkat we\
 name our releases in this format:
 
@@ -31,18 +31,18 @@ name our releases in this format:
 So a release could look like 1.0.0-Stable-Cake
 
 The food is changed every time a there is major release so for example:\
-1.0.0 is Bacon
-2.0.0 is Cookie
+1.0.0 is Bacon\
+2.0.0 is Cookie\
 But 1.2.3 would still be Bacon
 
-Where is the source code?\
+#### Where is the source code?\
 [Here](https://github.com/fozogt-jpg/MDD)\
-But what about specific versions?\
+#### But what about specific versions?\
 Go [Here](https://jxoj.github.io/MDD?tab=versions) download the version you wish to have the src of\
 Then go [Here](https://makecode.microbit.org) click import project and import the hex you just downloaded. Boom src code.
 
-Where can I download the `.hex` file?\
+#### Where can I download the `.hex` file?\
 [Here](https://jxoj.github.io/MDD?tab=versions)
 
-How can I install MDD?\
+#### How can I install MDD?\
 At [MDD Installer](https://jxoj.github.io/MDD?tab=installer)
