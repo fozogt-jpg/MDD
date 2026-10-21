@@ -40,6 +40,13 @@ function ButtonClicks () {
             }
         }
     }
+    if (MDDOSappssettingsopen) {
+        if (OnButton(70, -5, 64, 64)) {
+            CloseApp("Settings")
+            LaunchApp("Vfood")
+            serial.writeLine("Clicked")
+        }
+    }
 }
 function DrawAppSettings () {
     MDDOSappssettingscurrentpage = "about"
@@ -54,6 +61,8 @@ function DrawAppSettings () {
 function CloseApp (app: string) {
     if (app == "Settings") {
         MDDOSappssettingsopen = false
+    } else if (app == "Vfood") {
+        MDDOSappsvfoodopen = false
     }
     MDDOSappopen = false
 }
@@ -264,6 +273,7 @@ function DefaultVars () {
     MDDSYSKiosk_App = false
     MDDOSappopen = false
     MDDOSappssettingsopen = false
+    MDDOSappsvfoodopen = false
     MDDOSappsslot1 = "Settings"
     MDDOSappsslot1bp = MDDOSiconssettings
     MDDOSappslot1y = 10
@@ -271,7 +281,7 @@ function DefaultVars () {
     MDDSYSRenderallow = false
     MDDOSbleconnected = false
     MDDSYSOverride_Render_Error = false
-    MDDSYSsys_ver = "Dev 1"
+    MDDSYSsys_ver = "Dev 1.0.1"
     MDDSYSboot_icon = bmp`
         ................................................................
         ................................................................
@@ -444,6 +454,9 @@ function LaunchAppLogic (app: string) {
     if (app == "Settings") {
         MDDOSappssettingsopen = true
         MDDOScurrentopenapp = "Settings"
+    } else if (app == "Vfood") {
+        MDDOSappsvfoodopen = true
+        MDDOScurrentopenapp = "Vfood"
     }
 }
 function inDesktop () {
@@ -464,6 +477,8 @@ function inDesktop () {
 function DrawAppsLogic () {
     if (MDDOSappssettingsopen) {
         DrawAppSettings()
+    } else if (MDDOSappsvfoodopen) {
+        DrawAppVfood()
     }
 }
 function DrawTaskbar () {
@@ -486,8 +501,8 @@ function DrawTaskbar () {
 function ChannelLog () {
     MDDOSchannellog_lines = 2
     MDDOSchannellog = []
-    MDDOSchannellog.push("Added About")
-    MDDOSchannellog.push("to Settings App")
+    MDDOSchannellog.push("Added Easter")
+    MDDOSchannellog.push("Egg")
 }
 function logAPI (text: string, flags: string) {
     if (flags.includes("--reset")) {
@@ -572,6 +587,11 @@ serial.onDataReceived(serial.delimiters(Delimiters.Hash), function () {
     MDDSYSserialline = serial.readUntil(serial.delimiters(Delimiters.Hash))
     MDDOSPnP("--check")
 })
+function DrawAppVfood () {
+    screen().fill(15)
+    screen().drawTransparentBitmap(MDDOSimagesvfood, 95, 50)
+    screen().print("MDD Bacon 1.x.x", 20, 60, 1)
+}
 function DrawAppSettingsHovers () {
     if (OnButton(1, 15, 40, 12)) {
         screen().drawRect(1, 15, 40, 12, 12)
@@ -893,6 +913,72 @@ function Images () {
         8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
         8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888
         `
+    MDDOSimagesvfood = bmp`
+        .............................................................222
+        .............................................................222
+        ...........................................................22222
+        ..........................................................222333
+        ......................................................2222223333
+        .....................................................22222333333
+        ....................................................222233333333
+        ...................................................2222333333333
+        ..................................................22223333333eee
+        .................................................2222333333eeeee
+        ................................................222333333eeeeee.
+        ................................................22233333eeeee...
+        ..............................................222233333eeeee....
+        .............................................222233333eeeee.....
+        ............................................222233333eeeee......
+        ...........................................222333333eeeee.......
+        ..........................................222333333eeeee........
+        .........................................222233333eeeee.........
+        ........................................22223333eeeeee..........
+        .......................................222233333eeeee...........
+        .....................................2222233333eeeee............
+        ....................................22223333333eeee.............
+        ...................................22223333333eeee..............
+        ..................................2222333333eeeee...............
+        .................................2222333333eeeee................
+        ................................2222333333eeeee.................
+        ................................22233333eeeeee..................
+        ...............................222233333eeeee...................
+        ..............................222223333eeee.....................
+        ..............................22233333eeee......................
+        .............................222233333eeee......................
+        ............................222233333eeee.......................
+        ...........................222233333eeee........................
+        ..........................222233333eeee.........................
+        .........................222233333eeee..........................
+        ........................222233333eeeee..........................
+        .....................222222333333eeee...........................
+        .....................22222333333eeee............................
+        .................22222223333333eeee.............................
+        .............22222222233333333eeee..............................
+        ...........22222222333333333eeeee...............................
+        ..........2222233333333333eeeee.................................
+        .........2222233333333333eeeeee.................................
+        ........2222233333eeeeeeeeeee...................................
+        .......2222233333eeeeeeeeee.....................................
+        .......222233333eeeeeeeee.......................................
+        ......222233333eeeeee...........................................
+        .....222233333eeeeee............................................
+        .....22233333eeeeee.............................................
+        ....2223333eeeeeee..............................................
+        ..222233333eeeeee...............................................
+        .2222333333eeeee................................................
+        222233333eeeeee.................................................
+        22333333eeeeee..................................................
+        3333333eeeeee...................................................
+        333333eeeeee....................................................
+        3eeeeeeeeee.....................................................
+        eeeeeeeee.......................................................
+        eeeeeeee........................................................
+        eeee............................................................
+        ................................................................
+        ................................................................
+        ................................................................
+        ................................................................
+        `
 }
 function DrawDesktopApps () {
     if (OnButton(MDDOSappslot1x, MDDOSappslot1y, 16, 16)) {
@@ -909,9 +995,10 @@ function LaunchApp (app: string) {
 }
 // MDD is a full Operating Sytem for micro:bit V2, using display shields.
 // 
-// Current MDD release: Dev 1.0.0
+// Current MDD release: Dev 1.0.1
 // 
-// Git Repo: https://github.com/fozogt-jpg/MDD
+// Src Repo: https://github.com/fozogt-jpg/MDD
+// Site: https://jxoj.github.io/MDD
 // 
 // Boot Flags are:
 // --demo: Launch in a mode that does not use user spefic things and is generally better for looking at and testing the end user expirence
@@ -924,6 +1011,7 @@ function LaunchApp (app: string) {
 let MDDOSappssettingschannellog_lines_y = 0
 let MDDOSappssettingsprint_channellog_lines = 0
 let MDDOSPnPcurrent_device_name = ""
+let MDDOSimagesvfood: Bitmap = null
 let MDDSYSserialline = ""
 let MDDOSiconsredx: Bitmap = null
 let MDDOSos_hash = ""
@@ -972,9 +1060,10 @@ let MDDSYSbleon = false
 let MDDOSimagesbackground: Bitmap = null
 let MDDSYSRenderallow = false
 let MDDSYSPostDisplay_Shield = false
-let MDDOSappssettingsopen = false
+let MDDOSappsvfoodopen = false
 let MDDOSiconsappssettingsabout: Bitmap = null
 let MDDOSappssettingscurrentpage = ""
+let MDDOSappssettingsopen = false
 let MDDSYSPowerMenuopen = false
 let MDDOScurrentopenapp = ""
 let MDDOSappopen = false
